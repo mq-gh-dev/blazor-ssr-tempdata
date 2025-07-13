@@ -416,3 +416,22 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Azure Publishing Profiles and Service Dependencies
+*.pubxml
+*.pubxml.user
+**/Properties/PublishProfiles/
+**/Properties/ServiceDependencies/
+**/Properties/serviceDependencies.json
+**/Properties/serviceDependencies.*.json
+
+# Azure deployment scripts and configurations
+*.azureconfig
+*.deployproj
+.azure/
+
+# Local settings for Azure Functions
+local.settings.json
+
+# Azure publish settings
+PublishScripts/

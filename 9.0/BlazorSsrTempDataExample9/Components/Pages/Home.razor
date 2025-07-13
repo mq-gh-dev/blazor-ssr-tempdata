@@ -1,0 +1,72 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1 class="mb-4">Blazor SSR TempData Example</h1>
+
+<p>This is a static SSR Blazor page. Common form handling in SSR generally follows the post-redirect-get pattern. </p>
+<p>
+    Without TempData, developers often use mechanisms such as query parameters and flash cookies, which are unsuitable or cumbersome in some situations.
+</p>
+<p>This example uses BlazorSsrRedirectManager, powered by TempData, to make data persistence and retrieval easy with minimal code. There is also a StatusMessage helper component in the example.</p>
+<p>View the simple template/source code on GitHub: <a href="https://github.com/mq-gh-dev/blazor-ssr-tempdata" target="_blank" rel="noopener noreferrer">https://github.com/mq-gh-dev/blazor-ssr-tempdata</a></p>
+
+<div class="mt-4">
+    <StatusMessage />
+</div>
+
+<div class="mt-4">
+
+    @if (HasWeatherData)
+    {
+        <div class="alert alert-info">
+            <h5 class="mb-4">Weather Forecast Data from TempData:</h5>
+            <p><strong>Day:</strong> @DisplayModel.SelectedDay</p>
+            <p><strong>Description:</strong> @DisplayModel.Description</p>
+            <p>If you <a href="#" onclick="location.reload(); return false;" style="text-decoration: underline; cursor: pointer;">refresh</a> this page, you'll see the temp data disappear and there is no form submission warning from the browser.</p>
+        </div>
+    }
+
+    else
+    {
+        <EditForm Enhance="true" Model="@InputModel" FormName="weatherForm" method="post" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label for="weather-description" class="form-label fw-bold">Weather Description:</label>
+                <InputText id="weather-description" @bind-Value="InputModel.Description" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label for="day-of-week" class="form-label fw-bold">Day of Week:</label>
+                <InputSelect id="day-of-week" @bind-Value="InputModel.SelectedDay" class="form-control">
+                    @foreach (var day in Enum.GetValues<DayOfWeek>())
+                    {
+                        <option value="@day">@day</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Submit Type:</label>
+                <InputRadioGroup @bind-Value="InputModel.SubmitType">
+                    @foreach (var submitType in Enum.GetValues<Home.SubmitType>())
+                    {
+                        <div class="form-check mb-2">
+                            <InputRadio Value="@submitType" class="form-check-input" id="@($"radio-{submitType}")" />
+                            <label class="form-check-label" for="@($"radio-{submitType}")">
+                                @GetEnumDisplayName(submitType)
+                            </label>
+                        </div>
+                    }
+                </InputRadioGroup>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Submit Test
+            </button>
+        </EditForm>
+    }
+</div>
+
+
