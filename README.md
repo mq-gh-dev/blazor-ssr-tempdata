@@ -1,20 +1,20 @@
 # Blazor SSR TempData Example
 
-A clean, minimal example demonstrating how to use TempData in Blazor Static Server-Side Rendering (SSR) applications for the post-redirect-get pattern. It's made from the empty official Blazor SSR template with no additional dependencies.
+A clean, minimal example of TempData usage in Blazor Static Server-Side Rendering (SSR) for the post-redirect-get pattern. Built from the official empty Blazor SSR template with no other dependencies.
 
-## 🎯 Overview
+## Overview
 
-The solution includes a simple-to-use `BlazorSsrRedirectManager` service that handles redirections with TempData storage. A helper `StatusMessage` component displays TempData-based status messages after redirects. An example weather forecast form demonstrates access to TempData in Blazor components. 
+The solution includes a simple-to-use `BlazorSsrRedirectManager` service that handles redirections with TempData storage. A helper `StatusMessage` component displays TempData-based status messages after redirects. An example `Home` form demonstrates access to TempData in Blazor components. 
 
-TempData is an alternative to mechanisms such as query strings and flash cookies, which are less ideal for privacy, security and reliability concerns in many use cases.
+TempData is an alternative to other mechanisms such as query strings and flash cookies, which are less ideal for privacy, security and reliability concerns in many use cases.
 
-## 🚀 Live Demo
+## Live Demo
 
 [View Live Demo Here](https://blazor-ssr-temp-data-demo.azurewebsites.net/)
 
-## 📋 Availability
+## Availability
 
-While Blazor's official templates don't include built-in TempData support, it can be added via:
+While Blazor's official templates don't include built-in TempData support yet, it can be added via:
 
 ```csharp
 // Program.cs
@@ -22,8 +22,9 @@ While Blazor's official templates don't include built-in TempData support, it ca
 // AddRazorPages or AddControllersWithViews also work (especially if you need those in your project)
 builder.Services.AddMvcCore().AddViews();
 ```
+Please consider posting in [this Github issue](https://github.com/dotnet/aspnetcore/issues/49683) to request official TempData support in Blazor SSR from Microsoft.
 
-## 🔧 Usage Example
+## Usage Example
 
 ```csharp
 // Redirect with custom TempData
@@ -37,15 +38,15 @@ redirectManager.RedirectToWithStatusAndTempData("/profile", "Please complete you
 
 ```csharp
 // Access TempData in a component or class
- var tempData = tempDataFact.GetTempData(httpContext);      
+var tempData = tempDataFact.GetTempData(httpContext);      
 
- tempData.TryGetValue<string>("EmailAddress", out var email);
- tempData.TryGetValue<Guid>("UserId", out var userId);
+tempData.TryGetValue<string>("EmailAddress", out var email);
+tempData.TryGetValue<Guid>("UserId", out var userId);
 
 tempData.Save();
 ```
 
-## ⚠️ Known Limitations
+## Known Limitations
 
 - **Explicit Save() Required**: You must call `Save()` on your `ITempDataDictionary` after read/write (The auto `SaveTempDataFilter` isn't triggered likely due to the framework's `NavigationException` mechanism for static SSR).
 - **TempData Restrictions**: Subject to the same TempData restrictions in Razor Pages/MVC. Use simple types and safe serializable objects, etc.
@@ -53,10 +54,10 @@ tempData.Save();
 
 For complete TempData limitations and best practices, refer to the [official ASP.NET Core TempData documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state#tempdata).
 
-## 📦 Requirements
+## Requirements
 
 - .NET 8 or .NET 9 Blazor Web App (this template is built on .NET 9, but .NET 8 should work the same except for some language syntax tweaks)
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to submit issues, fork the repo, and create pull requests for any improvements.
