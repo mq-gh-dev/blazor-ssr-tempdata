@@ -1,0 +1,21 @@
+﻿@page "/Forecast"
+
+<h3 class="mb-4">Weather Forecast</h3>
+<div class="mb-4">
+    <StatusMessageDisplay />
+</div>
+
+@if (HasWeatherData)
+{
+    <div class="alert alert-info">
+        <h5 class="mb-4">Weather Forecast Data from TempData:</h5>
+        <p><strong>Day:</strong> @DisplayModel.SelectedDay</p>
+        <p><strong>Description:</strong> @DisplayModel.Description</p>
+        <p>If you <a href="#" onclick="location.reload(); return false;" style="text-decoration: underline; cursor: pointer;">refresh</a> this page or <a href="/" style="text-decoration: underline;">go back</a>, you'll see the temp data disappear and there is no form submission warning from the browser.</p>
+    </div>
+}
+
+else
+{
+    <p>No data exists from TempData</p>
+}

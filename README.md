@@ -57,7 +57,7 @@ For complete TempData limitations and best practices, refer to the [official ASP
 
 ## Requirements
 
-- .NET 8 or .NET 9 Blazor Web App (this template is built on .NET 9, but .NET 8 should work the same except for some language syntax tweaks)
+- .NET 8 or .NET 9 Blazor Web App.
 
 ## Contributing
 
