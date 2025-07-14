@@ -60,8 +60,7 @@ public partial class Home(BlazorSsrRedirectManager redirectManager,
             {
                 { nameof(InputModel.Description), InputModel.Description },
                 { nameof(InputModel.SelectedDay), InputModel.SelectedDay }
-            }
-            );
+            });
     }
 
     private void TestRedirectWithStatus()
@@ -86,8 +85,8 @@ public partial class Home(BlazorSsrRedirectManager redirectManager,
         [Required(ErrorMessage = "Please enter a weather description.")]
         [StringLength(100, ErrorMessage = "Description cannot exceed 100 characters.")]
         public string Description { get; set; } = "Sunny with a chance of meatballs.";
-        public DayOfWeek SelectedDay { get; set; } = DayOfWeek.Monday;
-        public SubmitType SubmitType { get; set; } = SubmitType.TempData;
+        public DayOfWeek SelectedDay { get; set; }
+        public SubmitType SubmitType { get; set; }
     }
 
     public enum SubmitType

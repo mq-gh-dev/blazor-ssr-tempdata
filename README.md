@@ -27,7 +27,7 @@ Please consider posting in [this Github issue](https://github.com/dotnet/aspnetc
 ## Usage Example
 
 ```csharp
-// Redirect with custom TempData
+// Redirect with custom status message and TempData
 redirectManager.RedirectToWithStatusAndTempData("/profile", "Please complete your profile",
     new Dictionary<string, object?> 
     {

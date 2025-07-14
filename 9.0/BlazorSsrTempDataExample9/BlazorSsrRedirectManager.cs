@@ -13,19 +13,19 @@ namespace BlazorSsrTempDataExample9
         private readonly NavigationManager _navigationManager;
         private string CurrentPathInclQuery => _navigationManager.ToBaseRelativePath(_navigationManager.Uri);
 
-        public BlazorSsrRedirectManager(IHttpContextAccessor httpContextAccessor, 
+        public BlazorSsrRedirectManager(IHttpContextAccessor httpContextAccessor,
             ITempDataDictionaryFactory tempDataDirectoryFactory, NavigationManager navigationManager, ILogger<BlazorSsrRedirectManager> logger)
         {
             if (httpContextAccessor.HttpContext == null)
             {
                 logger.LogError("Null HttpContext detected. This class works in SSR only.");
             }
-            
+
             else
             {
                 _tempData = tempDataDirectoryFactory.GetTempData(httpContextAccessor.HttpContext);
             }
-            
+
             _navigationManager = navigationManager;
         }
 
