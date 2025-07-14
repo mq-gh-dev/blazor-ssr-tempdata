@@ -19,6 +19,9 @@ builder.Services.AddHttpContextAccessor();
 // A conveneint redirect manager that can carry TempData and TempData-based status messages
 builder.Services.AddScoped<BlazorSsrRedirectManager>();
 
+// A convenient TempData accessor for cleaner retrieval code, fluent style
+builder.Services.AddScoped<TempDataAccessor>();
+
 // Some extra configs for cookie-based TempData for security.
 builder.Services.Configure<CookieTempDataProviderOptions>(options =>
 {

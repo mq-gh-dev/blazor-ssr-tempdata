@@ -12,7 +12,7 @@
 <p>View the simple template/source code on GitHub: <a href="https://github.com/mq-gh-dev/blazor-ssr-tempdata" target="_blank" rel="noopener noreferrer">https://github.com/mq-gh-dev/blazor-ssr-tempdata</a></p>
 
 <div class="mt-4">
-    <StatusMessage />
+    <StatusMessageDisplay />
 </div>
 
 <div class="mt-4 mb-4">
@@ -35,6 +35,7 @@
             <div class="mb-3">
                 <label for="weather-description" class="form-label fw-bold">Weather Description:</label>
                 <InputText id="weather-description" @bind-Value="InputModel.Description" class="form-control" />
+                <ValidationMessage For="@(() => InputModel.Description)" />
             </div>
 
             <div class="mb-3">

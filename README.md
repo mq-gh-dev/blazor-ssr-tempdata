@@ -4,7 +4,7 @@ A clean, minimal example of TempData usage in Blazor Static Server-Side Renderin
 
 ## Overview
 
-The solution includes a simple-to-use `BlazorSsrRedirectManager` service that handles redirections with TempData storage. A helper `StatusMessage` component displays TempData-based status messages after redirects. An example `Home` form demonstrates access to TempData in Blazor components. 
+The solution includes a simple `BlazorSsrRedirectManager` service that handles redirecting and saving TempData, a `TempDataAccessor` service that retrieves TempData, and a helper `StatusMessageDisplay` component for TempData-based status messages. An example `Home` form demonstrates their use. 
 
 TempData is an alternative to other mechanisms such as query strings and flash cookies, which are less ideal for privacy, security and reliability concerns in many use cases.
 
@@ -27,8 +27,8 @@ Please consider posting in [this Github issue](https://github.com/dotnet/aspnetc
 ## Usage Example
 
 ```csharp
-// Redirect with custom status message and TempData
-redirectManager.RedirectToWithStatusAndTempData("/profile", "Please complete your profile",
+// Redirect with status message and TempData
+redirectManager.RedirectToWithStatusAndTempData("/profile", "Please complete your profile", Severity.Info,
     new Dictionary<string, object?> 
     {
         { "EmailAddress", email },
@@ -37,22 +37,23 @@ redirectManager.RedirectToWithStatusAndTempData("/profile", "Please complete you
 ```
 
 ```csharp
-// Access TempData in a component or class
-var tempData = tempDataFact.GetTempData(httpContext);      
+// Access TempData via TempDataAccessor
+tempDataAccessor
+   .TryGet<string?>("EmailAddress", out var email, out bool hasEmail)
+   .TryGet<Guid?>("UserId", out var userId, out bool hasId)
+   .Save();
 
-tempData.TryGetValue<string>("EmailAddress", out var email);
-tempData.TryGetValue<Guid>("UserId", out var userId);
-
-tempData.Save();
+// Note: You can also inject ITempDataDictionaryFactory and access TempData manually, 
+// as shown in Forecast.razor.cs
 ```
 
 ## Known Limitations
 
-- **Explicit Save() Required**: You must call `Save()` on your `ITempDataDictionary` after read/write (The auto `SaveTempDataFilter` isn't triggered likely due to the framework's `NavigationException` mechanism for static SSR).
-- **TempData Restrictions**: Subject to the same TempData restrictions in Razor Pages/MVC. Use simple types and safe serializable objects, etc.
+- **Explicit Save() Required**: You must call `Save()` after using `TempDataAccessor` (or `ITempDataDictionary`). The auto `SaveTempDataFilter` isn't triggered likely due to the framework's `NavigationException` mechanism for static SSR (could be fixed in .NET 10).
+- **TempData Restrictions**: Subject to the same TempData restrictions as in Razor Pages/MVC. Use simple types and safe serializable objects, etc.
 - **Size Limits**: Subject to cookie size limitations when using the default cookie provider. You should be able to configure session provider if needed (untested).
 
-For complete TempData limitations and best practices, refer to the [official ASP.NET Core TempData documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state#tempdata).
+For complete TempData limitations and best practices, refer to the [official ASP.NET Core TempData documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-9.0#tempdata).
 
 ## Requirements
 

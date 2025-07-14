@@ -4,8 +4,7 @@ using static BlazorSsrTempDataExample9.Components.Pages.Home;
 
 namespace BlazorSsrTempDataExample9.Components.Pages
 {
-    public partial class Forecast(BlazorSsrRedirectManager redirectManager,
-    ITempDataDictionaryFactory tempDataDictionaryFactory)
+    public partial class Forecast(ITempDataDictionaryFactory tempDataDictionaryFactory)
     {
         [CascadingParameter]
         private HttpContext HttpContext { get; set; } = default!;
@@ -17,21 +16,20 @@ namespace BlazorSsrTempDataExample9.Components.Pages
         {
             if (HttpMethods.IsGet(HttpContext.Request.Method))
             {
-                // Access TempData to retrieve previously saved weather data
+                // This example purposely injects and accesses ITempDataDictionary manually instead of
+                // using the helper TempDataAccessor class shown in other examples
                 var tempData = tempDataDictionaryFactory.GetTempData(HttpContext);
 
-                var hasWeatherDesc = tempData.TryGetValue<string>(nameof(DisplayModel.Description), out var desc);
-                var hasDay = tempData.TryGetValue<DayOfWeek>(nameof(DisplayModel.SelectedDay), out var day);
+                var hasWeatherDesc = tempData.TryGetValue<string?>(nameof(DisplayModel.Description), out var desc);
+                var hasDay = tempData.TryGetValue<DayOfWeek?>(nameof(DisplayModel.SelectedDay), out var day);
 
-                DisplayModel.Description = hasWeatherDesc ? desc! : string.Empty;
-                DisplayModel.SelectedDay = hasDay ? day : default;
                 HasWeatherData = hasWeatherDesc || hasDay;
+                DisplayModel.Description = desc?? string.Empty;
+                DisplayModel.SelectedDay = day?? default;
 
                 // Call this to ensure TempData is cleared after reading
                 tempData.Save();
             }
         }
-
-
     }
 }

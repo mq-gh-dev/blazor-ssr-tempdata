@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using static BlazorSsrTempDataExample9.BlazorSsrRedirectManager;
 namespace BlazorSsrTempDataExample9.Components.Pages;
 
 public partial class Home(BlazorSsrRedirectManager redirectManager,
-    ITempDataDictionaryFactory tempDataDictionaryFactory)
+    TempDataAccessor tempDataAccessor)
 {
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -22,18 +21,14 @@ public partial class Home(BlazorSsrRedirectManager redirectManager,
     {
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
-            // Access TempData to retrieve previously saved weather data
-            var tempData = tempDataDictionaryFactory.GetTempData(HttpContext);
-
-            var hasWeatherDesc = tempData.TryGetValue<string>(nameof(InputModel.Description), out var desc);
-            var hasDay = tempData.TryGetValue<DayOfWeek>(nameof(InputModel.SelectedDay), out var day);
-
-            DisplayModel.Description = hasWeatherDesc ? desc! : string.Empty;
-            DisplayModel.SelectedDay = hasDay ? day : default;
-            HasWeatherData = hasWeatherDesc || hasDay;
-
-            // Call this to ensure TempData is cleared after reading
-            tempData.Save();
+            // Use TempDataAccessor for cleaner retrieval
+            tempDataAccessor
+                .TryGet<string>(nameof(InputModel.Description), out var desc, out bool hasDesc)
+                .TryGet<DayOfWeek>(nameof(InputModel.SelectedDay), out var day, out bool hasDay)
+                .Save();
+            HasWeatherData = hasDesc || hasDay;
+            DisplayModel.Description = desc ?? string.Empty;
+            DisplayModel.SelectedDay = day;
         }
     }
 

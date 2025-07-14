@@ -1,0 +1,6 @@
+﻿@if (!string.IsNullOrWhiteSpace(StatusMessage))
+{
+    <div class="alert @GetAlertClass()" role="alert">
+        @StatusMessage
+    </div>
+}
