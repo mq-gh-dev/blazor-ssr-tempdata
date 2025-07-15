@@ -1,6 +1,6 @@
 # Blazor SSR TempData Example
 
-A clean, minimal example of TempData usage in Blazor Static Server-Side Rendering (SSR) for the post-redirect-get pattern. Built from the official empty Blazor SSR template with no other dependencies.
+A clean, minimal example of TempData usage in Blazor Static Server-Side Rendering (SSR) for the post-redirect-get pattern. Built on the empty Blazor SSR template with no other dependencies.
 
 ## Overview
 
@@ -14,7 +14,7 @@ TempData is an alternative to other mechanisms such as query strings and flash c
 
 ## Availability
 
-While Blazor's official templates don't include built-in TempData support yet, it can be added via:
+While Blazor's official templates don't include built-in TempData support yet, it can be easily added via:
 
 ```csharp
 // Program.cs
@@ -50,10 +50,10 @@ tempDataAccessor
 ## Known Limitations
 
 - **Explicit Save() Required**: You must call `Save()` after using `TempDataAccessor` (or `ITempDataDictionary`). The auto `SaveTempDataFilter` isn't triggered likely due to the framework's `NavigationException` mechanism for static SSR (could be fixed in .NET 10).
-- **TempData Restrictions**: Subject to the same TempData restrictions as in Razor Pages/MVC. Use simple types and safe serializable objects, etc.
-- **Size Limits**: Subject to cookie size limitations when using the default cookie provider. You should be able to configure session provider if needed (untested).
+- **TempData Restrictions**: Subject to the same TempData restrictions as in Razor Pages/MVC. Use simple serializable types supported by the framework (`string`, `Enum`, `int`, `bool`, `Guid`, `DateTime`, their nullable counterparts, and collections of `int` or `string`).
+- **Size Limit**: Subject to cookie size limitations when using the default cookie data provider. You should be able to configure session provider if needed (untested).
 
-For complete TempData limitations and best practices, refer to the [official ASP.NET Core TempData documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-9.0#tempdata).
+ To learn more about TempData, see the [official ASP.NET Core TempData documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-9.0#tempdata).
 
 ## Requirements
 
@@ -61,4 +61,4 @@ For complete TempData limitations and best practices, refer to the [official ASP
 
 ## Contributing
 
-Feel free to submit issues, fork the repo, and create pull requests for any improvements.
+Feel free to submit issues, fork, and create pull requests for any improvements.

@@ -17,8 +17,8 @@ namespace BlazorSsrTempDataExample8.Components.Shared
         protected override void OnInitialized()
         {
             TempDataAccessor
-                .TryGet<string?>("StatusMessage", out var msg, out _)
-                .TryGet<Severity?>("StatusSeverity", out var severity, out _)
+                .TryGet<string?>(StatusMessageKey, out var msg, out _)
+                .TryGet<Severity?>(StatusSeverityKey, out var severity, out _)
                 .Save();
 
             StatusMessage = msg;

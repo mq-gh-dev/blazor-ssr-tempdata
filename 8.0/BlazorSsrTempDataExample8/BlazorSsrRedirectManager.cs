@@ -11,7 +11,11 @@ namespace BlazorSsrTempDataExample8
     {
         private readonly ITempDataDictionary? _tempData;
         private readonly NavigationManager _navigationManager;
-        private string CurrentPathInclQuery => _navigationManager.ToBaseRelativePath(_navigationManager.Uri);
+        private string CurrentPathKeepQuery => _navigationManager.ToAbsoluteUri(_navigationManager.Uri).AbsoluteUri;
+        private string CurrentPathWithoutQuery => _navigationManager.ToAbsoluteUri(_navigationManager.Uri).GetLeftPart(UriPartial.Path);
+
+        public static string StatusMessageKey => "StatusMessage";
+        public static string StatusSeverityKey => "StatusSeverity";
 
         public BlazorSsrRedirectManager(IHttpContextAccessor httpContextAccessor,
             ITempDataDictionaryFactory tempDataDirectoryFactory, NavigationManager navigationManager, ILogger<BlazorSsrRedirectManager> logger)
@@ -65,8 +69,8 @@ namespace BlazorSsrTempDataExample8
         public void RedirectToWithStatus(string uri, string message, Severity severity)
         {
             Dictionary<string, object?> data = new() {
-                {"StatusMessage", message },
-                {"StatusSeverity", severity}
+                {StatusMessageKey, message },
+                {StatusSeverityKey, severity}
                 };
 
             RedirectToWithTempData(uri, data);
@@ -88,37 +92,42 @@ namespace BlazorSsrTempDataExample8
         }
 
         /// <summary>
-        /// Redirect to the current URI, query parameters INCLUDED.
+        /// Redirect to the current URI
         /// </summary>
+        /// <param name="keepQuery"> If true, the query parameters will be kept in the redirect URI; otherwise, they will be removed.</param>
         [DoesNotReturn]
-        public void RedirectToCurrentPageKeepQuery() => RedirectTo(CurrentPathInclQuery);
+        public void RedirectToCurrentPage(bool keepQuery = true) =>
+            RedirectTo(keepQuery ? CurrentPathKeepQuery : CurrentPathWithoutQuery);
 
         /// <summary>
-        /// Redirects to the current URI (keep query parameters) and persists data to TempData for the next request.
+        /// Redirects to the current URI and persists data to TempData for the next request.
         /// </summary>
         /// <param name="data">The temp data to persist, subject to TempData limitations.</param>
+        /// <param name="keepQuery"> If true, the query parameters will be kept in the redirect URI; otherwise, they will be removed.</param>
         [DoesNotReturn]
-        public void RedirectToCurrentPageWithTempData(IDictionary<string, object?> data)
-            => RedirectToWithTempData(CurrentPathInclQuery, data);
+        public void RedirectToCurrentPageWithTempData(IDictionary<string, object?> data, bool keepQuery = true)
+            => RedirectToWithTempData(keepQuery ? CurrentPathKeepQuery : CurrentPathWithoutQuery, data);
 
         /// <summary>
-        /// Redirect to the current URI (keep query parameters) with a status message and severity in Tempdata for the next request
+        /// Redirect to the current URI with a status message and severity in Tempdata for the next request
         /// </summary>
         /// <param name="message">The status message, which will have a key of "StatusMessage" in TempData</param>
         /// <param name="severity">The status message severity, which will have a key of "StatusSeverity" in TempData</param>
+        /// <param name="keepQuery"> If true, the query parameters will be kept in the redirect URI; otherwise, they will be removed.</param>
         [DoesNotReturn]
-        public void RedirectToCurrentPageWithStatus(string message, Severity severity)
-            => RedirectToWithStatus(CurrentPathInclQuery, message, severity);
+        public void RedirectToCurrentPageWithStatus(string message, Severity severity, bool keepQuery = true)
+            => RedirectToWithStatus(keepQuery ? CurrentPathKeepQuery : CurrentPathWithoutQuery, message, severity);
 
         /// <summary>
-        /// Redirect to the current URI (keep query parameters) with a status message, severity, and additional TempData for the next request
+        /// Redirect to the current URI with a status message, severity, and additional TempData for the next request
         /// </summary>
         /// <param name="message">The status message, which will have a key of "StatusMessage" in TempData</param>
         /// <param name="severity">The status message severity, which will have a key of "StatusSeverity" in TempData</param>
         /// <param name="data">The additional temp data to persist, subject to TempData limitations.</param>
+        /// <param name="keepQuery"> If true, the query parameters will be kept in the redirect URI; otherwise, they will be removed.</param>
         [DoesNotReturn]
-        public void RedirectToCurrentPageWithStatusAndTempData(string message, Severity severity, IDictionary<string, object?> data)
-            => RedirectToWithStatusAndTempData(CurrentPathInclQuery, message, severity, data);
+        public void RedirectToCurrentPageWithStatusAndTempData(string message, Severity severity, IDictionary<string, object?> data, bool keepQuery = true)
+            => RedirectToWithStatusAndTempData(keepQuery ? CurrentPathKeepQuery : CurrentPathWithoutQuery, message, severity, data);
 
         /// <summary>
         /// Redirect to a specified URI. 
@@ -142,9 +151,9 @@ namespace BlazorSsrTempDataExample8
         }
 
         /// <summary>
-        /// Redirect to a specified URI with query parameters.
+        /// Redirect to a specified URI with specified query parameters.
         /// </summary>
-        /// <param name="uri">The destination URI</param>
+        /// <param name="uri">The destination URI, WITHOUT query parameters (Note: any existing query parameters will be removed from this URI!)</param>
         /// <param name="queryParameters">The query parameters</param>
         [DoesNotReturn]
         public void RedirectTo(string uri, Dictionary<string, object?> queryParameters)
