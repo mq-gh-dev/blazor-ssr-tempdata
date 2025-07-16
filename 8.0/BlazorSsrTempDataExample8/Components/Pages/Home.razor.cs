@@ -91,11 +91,11 @@ namespace BlazorSsrTempDataExample8.Components.Pages
 
         public enum SubmitType
         {
-            [Display(Name = "Test Redirect with TempData")]
+            [Display(Name = "Redirect with TempData")]
             TempData,
-            [Display(Name = "Test Redirect with Status")]
+            [Display(Name = "Redirect with Status")]
             Status,
-            [Display(Name = "Test Redirect with Status and TempData")]
+            [Display(Name = "Redirect with Status + TempData")]
             StatusAndTempData
         }
 

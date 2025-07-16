@@ -70,8 +70,7 @@ namespace BlazorSsrTempDataExample8
         {
             Dictionary<string, object?> data = new() {
                 {StatusMessageKey, message },
-                {StatusSeverityKey, severity}
-                };
+                {StatusSeverityKey, severity}};
 
             RedirectToWithTempData(uri, data);
         }
@@ -86,8 +85,8 @@ namespace BlazorSsrTempDataExample8
         [DoesNotReturn]
         public void RedirectToWithStatusAndTempData(string uri, string message, Severity severity, IDictionary<string, object?> data)
         {
-            data["StatusMessage"] = message;
-            data["StatusSeverity"] = severity;
+            data[StatusMessageKey] = message;
+            data[StatusSeverityKey] = severity;
             RedirectToWithTempData(uri, data);
         }
 

@@ -9,7 +9,7 @@
     Without TempData, developers often use query parameters or flash cookies to persist data between redirects. That can be unsuitable or cumbersome in some situations.
 </p>
 <p>This example uses BlazorSsrRedirectManager and TempDataAccessor to make TempData persistence and retrieval easy with minimal code. There is also a StatusMessageDisplay helper component.</p>
-<p>View the source code on GitHub: <a href="https://github.com/mq-gh-dev/blazor-ssr-tempdata" target="_blank" rel="noopener noreferrer">https://github.com/mq-gh-dev/blazor-ssr-tempdata</a></p>
+<p>View the source code on GitHub: <a href="https://github.com/mq-gh-dev/blazor-ssr-tempdata" target="_blank" rel="noopener">https://github.com/mq-gh-dev/blazor-ssr-tempdata</a></p>
 
 <div class="mt-4">
     <StatusMessageDisplay />
@@ -49,7 +49,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold">Submit Type:</label>
+                <label class="form-label fw-bold">Test Scenario:</label>
                 <InputRadioGroup @bind-Value="InputModel.SubmitType">
                     @foreach (var submitType in Enum.GetValues<Home.SubmitType>())
                     {
@@ -64,7 +64,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">
-                Submit Test
+                Submit & Redirect
             </button>
         </EditForm>
     }
